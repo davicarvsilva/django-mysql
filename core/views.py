@@ -1,13 +1,16 @@
 from django.shortcuts import render
-from firebase_config import firebase_connection
+import firebase_config
 
 def home(request):
-    database = firebase_connection()
+    people = []
 
-    name = database.child('data').child('nome').get().val()
-    
-    context = {
-        'name':name,
-    }
+    dbconn = firebase_config.connectDB("Person")
+    tblPeople = dbconn.get()
 
-    return render(request, "core/home.html", context)
+    for key, value in tblPeople.items():
+        for k, v in value.items():
+            people.append({k:v})
+
+    #firebase_config.push("silas")
+
+    return render(request, "core/home.html", {'people':people})

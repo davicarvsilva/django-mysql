@@ -1,5 +1,17 @@
 import pyrebase 
+import firebase_admin
 from decouple import config
+from firebase_admin import credentials
+from firebase_admin import db
+
+def connectDB(data):
+    if not firebase_admin._apps:
+        cred = credentials.Certificate("firebase-key.json")
+        firebase_admin.initialize_app(cred, {
+            "databaseURL": config('DATABASE_URL')
+        })
+    dbconn = db.reference(data)
+    return dbconn
 
 def firebase_connection():
     configuration = { 
@@ -17,3 +29,14 @@ def firebase_connection():
     database=firebase.database() 
 
     return database
+
+def push(data):
+    if not firebase_admin._apps:
+        cred = credentials.Certificate("firebase-key.json")
+        firebase_admin.initialize_app(cred, {
+            "databaseURL": config('DATABASE_URL')
+        })
+
+    dbref = db.reference("Person")
+
+    dbref.push({"nome": data})

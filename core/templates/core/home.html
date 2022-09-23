@@ -7,6 +7,11 @@
     <title>Document</title>
 </head>
 <body>
-    <h1>Hi, {{ name }}</h1>
+    {% for person in people %}
+        {% for key, value in person.items %}
+            {{ key }} - {{ value }}
+            <br>
+        {% endfor %}    
+    {% endfor %}
 </body>
 </html>
